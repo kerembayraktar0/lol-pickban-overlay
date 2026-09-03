@@ -1,0 +1,16 @@
+{
+  "name": "lol-pickban-backend",
+  "version": "1.0.0",
+  "description": "LCU API'den Pick/Ban verisini okuyup OBS overlay'e WebSocket ile aktaran backend",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "axios": "^1.7.7",
+    "ws": "^8.18.0"
+  }
+}

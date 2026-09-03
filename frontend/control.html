@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<title id="pageTitle">Overlay Kontrol Paneli</title>
+<style>
+  body { font-family: Arial, sans-serif; background:#0b0e14; color:#eee; padding:30px; max-width:520px; margin:auto; }
+  h2 { color:#c8aa6e; }
+  fieldset { border:1px solid #333; border-radius:8px; margin-bottom:16px; padding:14px; }
+  legend { padding:0 8px; }
+  label { display:block; margin-top:8px; font-size:13px; color:#aaa; }
+  input, select { width:100%; padding:8px; margin-top:4px; border-radius:4px; border:1px solid #444; background:#161b24; color:#fff; box-sizing:border-box; }
+  button { margin-top:16px; width:100%; padding:12px; background:#c8aa6e; border:none; border-radius:6px; font-weight:bold; cursor:pointer; }
+  #status { margin-top:10px; font-size:13px; color:#4caf50; height:16px; }
+</style>
+</head>
+<body>
+  <h2 id="mainTitle">Pick/Ban Overlay — Kontrol Paneli</h2>
+
+  <fieldset>
+    <legend id="langLegend">Dil</legend>
+    <select id="langSelect">
+      <option value="tr">Türkçe</option>
+      <option value="en">English</option>
+    </select>
+  </fieldset>
+
+  <fieldset>
+    <legend id="matchLegend">Maç</legend>
+    <label id="matchLabelLabel">Maç etiketi (örn. MAÇ 1 / BO5)</label>
+    <input id="matchLabel" />
+  </fieldset>
+
+  <fieldset>
+    <legend id="blueLegend" style="color:#1baaf0">Mavi Takım</legend>
+    <label id="blueNameLabel">İsim</label><input id="blueName" />
+    <label id="blueLogoLabel">Logo URL</label><input id="blueLogo" />
+    <label id="blueScoreLabel">Skor</label><input id="blueScore" type="number" />
+  </fieldset>
+
+  <fieldset>
+    <legend id="redLegend" style="color:#ff4655">Kırmızı Takım</legend>
+    <label id="redNameLabel">İsim</label><input id="redName" />
+    <label id="redLogoLabel">Logo URL</label><input id="redLogo" />
+    <label id="redScoreLabel">Skor</label><input id="redScore" type="number" />
+  </fieldset>
+
+  <button id="saveBtn" onclick="save()">Kaydet ve Yayına Gönder</button>
+  <div id="status"></div>
+
+<script src="i18n.js"></script>
+<script>
+const API = "http://localhost:5000/api/config";
+let currentLang = "tr";
+
+function applyTexts() {
+  const t = I18N[currentLang].control;
+  document.title = t.title;
+  mainTitle.textContent = t.title;
+  langLegend.textContent = t.langLabel;
+  matchLegend.textContent = t.matchLegend;
+  matchLabelLabel.textContent = t.matchLabelField;
+  blueLegend.textContent = t.blueLegend;
+  blueNameLabel.textContent = t.nameField;
+  blueLogoLabel.textContent = t.logoField;
+  blueScoreLabel.textContent = t.scoreField;
+  redLegend.textContent = t.redLegend;
+  redNameLabel.textContent = t.nameField;
+  redLogoLabel.textContent = t.logoField;
+  redScoreLabel.textContent = t.scoreField;
+  saveBtn.textContent = t.saveBtn;
+}
+
+async function load() {
+  const res = await fetch(API);
+  const cfg = await res.json();
+  currentLang = resolveLang(cfg.language);
+  langSelect.value = currentLang;
+  applyTexts();
+
+  matchLabel.value = cfg.matchLabel || "";
+  blueName.value = cfg.blueTeam?.name || "";
+  blueLogo.value = cfg.blueTeam?.logo || "";
+  blueScore.value = cfg.blueTeam?.score ?? 0;
+  redName.value = cfg.redTeam?.name || "";
+  redLogo.value = cfg.redTeam?.logo || "";
+  redScore.value = cfg.redTeam?.score ?? 0;
+}
+
+async function save() {
+  const body = {
+    language: langSelect.value,
+    matchLabel: matchLabel.value,
+    blueTeam: { name: blueName.value, logo: blueLogo.value, score: Number(blueScore.value) },
+    redTeam: { name: redName.value, logo: redLogo.value, score: Number(redScore.value) },
+  };
+  await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  currentLang = resolveLang(langSelect.value);
+  applyTexts();
+  status.textContent = I18N[currentLang].control.saved(new Date().toLocaleTimeString());
+  setTimeout(() => (status.textContent = ""), 2000);
+}
+
+langSelect.addEventListener("change", () => {
+  currentLang = resolveLang(langSelect.value);
+  applyTexts();
+});
+
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+/* =========================================================
+   LoL Pick/Ban Overlay — LEC Stil (Alt Sıra / Bottom-Row versiyonu)
+   OBS Browser Source: 1920x1080, arka plan transparan
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Teko:wght@600;700&display=swap');
+
+:root {
+  --blue: #1baaf0;
+  --blue-glow: rgba(27, 170, 240, 0.55);
+  --red: #ff4655;
+  --red-glow: rgba(255, 70, 85, 0.55);
+  --gold: #c8aa6e;
+  --panel-dark: rgba(6, 10, 18, 0.86);
+  --panel-darker: rgba(3, 6, 11, 0.92);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 1920px;
+  height: 1080px;
+  background: transparent;
+  overflow: hidden;
+  font-family: 'Rajdhani', sans-serif;
+  color: #fff;
+}
+
+.hidden { opacity: 0; pointer-events: none; }
+
+img { display: block; }
+/* Görsel bulunamazsa (404) tarayıcının çirkin "kırık resim" ikonunu asla gösterme */
+img:not([src]), img[src=""] { visibility: hidden; }
+
+/* =========================================================
+   ÖNCEKİ MAÇ PICKLERİ ŞERİDİ — draft başlamadan önce de her zaman görünür
+   ========================================================= */
+#recap-bar {
+  position: absolute;
+  top: 110px; left: 0; right: 0;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  background: rgba(6, 10, 18, 0.7);
+  transition: opacity 0.4s ease;
+}
+#recap-bar.hidden { opacity: 0; pointer-events: none; }
+
+.recap-side { display: flex; align-items: center; gap: 12px; width: 620px; }
+.recap-side.red { justify-content: flex-end; }
+
+.recap-team-name {
+  font-family: 'Teko', sans-serif;
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #aaa;
+  flex-shrink: 0;
+}
+
+#recap-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+  width: 260px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.recap-icons {
+  display: grid;
+  grid-template-columns: repeat(5, 34px);
+  grid-auto-rows: 34px;
+  gap: 5px;
+}
+.recap-icons .recap-champ {
+  width: 34px; height: 34px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.recap-icons .recap-champ img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------------- ÜST BAR ---------------- */
+#top-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  background: linear-gradient(180deg, var(--panel-darker) 0%, rgba(3,6,11,0.55) 85%, transparent 100%);
+}
+#top-bar.entered, #bottom-bar.entered { animation: fadeIn 0.7s ease; }
+
+.team-block { display: flex; align-items: center; gap: 16px; width: 620px; }
+.team-block.red { justify-content: flex-end; }
+
+.team-logo { width: 56px; height: 56px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(255,255,255,0.25)); }
+.team-logo[src=""], .team-logo:not([src]) { display: none; }
+
+.team-name { font-family: 'Teko', sans-serif; font-size: 36px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+.team-block.blue .team-name { color: var(--blue); text-shadow: 0 0 14px var(--blue-glow); }
+.team-block.red .team-name { color: var(--red); text-shadow: 0 0 14px var(--red-glow); }
+
+.team-score { font-family: 'Teko', sans-serif; font-size: 46px; font-weight: 700; min-width: 50px; text-align: center; }
+
+.center-block-unused { display: none; }
+.center-block { display: flex; flex-direction: column; align-items: center; width: 260px; }
+#match-label { font-size: 14px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; }
+#phase-label { font-family: 'Teko', sans-serif; font-size: 22px; letter-spacing: 2px; color: #e6e6e6; text-transform: uppercase; margin-bottom: 2px; }
+
+#timer-ring { position: relative; width: 56px; height: 56px; }
+#timer-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.timer-bg { fill: none; stroke: rgba(255,255,255,0.15); stroke-width: 8; }
+.timer-fg {
+  fill: none; stroke: var(--gold); stroke-width: 8; stroke-linecap: round;
+  stroke-dasharray: 283; stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.3s linear, stroke 0.3s ease;
+}
+#timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Teko', sans-serif; font-size: 20px; font-weight: 700; }
+
+/* =========================================================
+   ALT BAR — fotoğraftaki gibi tek geniş şerit, picks + bans
+   ========================================================= */
+#bottom-bar {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(0deg, var(--panel-darker) 0%, rgba(3,6,11,0.6) 80%, transparent 100%);
+  padding-top: 10px;
+}
+
+/* --- İnce ban şeridi (pick şeridinin üstünde) --- */
+#bans-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 0 20px 8px;
+}
+.bans-row { display: flex; gap: 6px; }
+
+.ban-icon {
+  width: 46px; height: 46px;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 12px),
+    rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.ban-icon.enter { animation: fadeIn 0.4s ease; }
+.ban-icon img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center center;
+  /* Not: artık gri tonlama YOK — banlanan şampiyon kendi renklerinde görünüyor */
+}
+.ban-icon { border-color: rgba(255,70,85,0.35); }
+/* X işareti YOK — sadece gri tonlama ile "banlandı" hissi */
+
+#center-bans-label {
+  font-family: 'Teko', sans-serif;
+  font-size: 15px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  width: 160px;
+  text-align: center;
+}
+
+/* --- Ana pick şeridi --- */
+#picks-strip {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0;
+  padding: 0 20px 16px;
+}
+
+.picks-row { display: flex; gap: 6px; }
+
+.pick-card {
+  position: relative;
+  width: 158px;
+  height: 236px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(20,26,38,0.9), rgba(8,11,18,0.95));
+}
+.pick-card.enter { animation: slideUp 0.5s ease; }
+
+.picks-row:first-child .pick-card { border-bottom: 4px solid var(--blue); }
+#red-picks .pick-card { border-bottom: 4px solid var(--red); }
+
+.pick-card .splash-img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+  transition: filter 0.4s ease, opacity 0.4s ease;
+}
+.pick-card .splash-img.hover-only { filter: grayscale(1) brightness(0.35) contrast(0.9); opacity: 0.85; }
+.pick-card .splash-img.locked { filter: none; opacity: 1; }
+
+.pick-card .placeholder {
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 2px, transparent 2px 14px),
+    radial-gradient(circle at 50% 30%, rgba(255,255,255,0.06), transparent 70%);
+  display: flex; align-items: center; justify-content: center;
+}
+#blue-picks .pick-card .placeholder { background-color: rgba(27,170,240,0.06); }
+#red-picks .pick-card .placeholder { background-color: rgba(255,70,85,0.06); }
+.pick-card .placeholder .role-mark { width: 28px; height: 28px; border: 2px solid rgba(255,255,255,0.18); border-radius: 50%; }
+
+.pick-card .name-bar {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 8px 10px 8px;
+  background: linear-gradient(0deg, rgba(0,0,0,0.92) 45%, transparent 100%);
+  display: flex; flex-direction: column;
+  text-align: center;
+}
+.pick-card .player-name { font-size: 13px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pick-card .champ-name { font-family: 'Teko', sans-serif; font-size: 20px; font-weight: 700; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.pick-card.active { box-shadow: inset 0 0 0 2px var(--gold), 0 0 16px var(--gold); }
+
+/* --- Orta blok (takım logoları) --- */
+#center-block {
+  width: 200px;
+  height: 236px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+.center-logo { width: 46px; height: 46px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(255,255,255,0.2)); }
+.center-logo[src=""], .center-logo:not([src]) { display: none; }
+#center-vs { font-family: 'Teko', sans-serif; font-size: 22px; color: var(--gold); letter-spacing: 2px; }
+
+/* ---------------- ANİMASYONLAR (sadece .enter class'ı eklendiğinde, tek seferlik) ---------------- */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }

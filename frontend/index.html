@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<title>LoL Pick/Ban Overlay</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ÜST BAR: Takım isimleri, logo, skor, faz/zamanlayıcı -->
+  <div id="top-bar" class="hidden">
+    <div class="team-block blue">
+      <img id="blue-logo" class="team-logo" alt="" />
+      <span id="blue-name" class="team-name">BLUE TEAM</span>
+      <span id="blue-score" class="team-score">0</span>
+    </div>
+
+    <div class="center-block">
+      <div id="match-label">MAÇ 1 / BO5</div>
+      <div id="phase-label">PICK/BAN</div>
+      <div id="timer-ring">
+        <svg viewBox="0 0 100 100">
+          <circle class="timer-bg" cx="50" cy="50" r="45"></circle>
+          <circle id="timer-fg" class="timer-fg" cx="50" cy="50" r="45"></circle>
+        </svg>
+        <span id="timer-text">30</span>
+      </div>
+    </div>
+
+    <div class="team-block red">
+      <span id="red-score" class="team-score">0</span>
+      <span id="red-name" class="team-name">RED TEAM</span>
+      <img id="red-logo" class="team-logo" alt="" />
+    </div>
+  </div>
+
+  <!-- ÖNCEKİ MAÇ PICKLERİ: draft başlamadan önce de, her zaman görünür -->
+  <div id="recap-bar" class="hidden">
+    <div class="recap-side blue">
+      <span id="recap-blue-name" class="recap-team-name">MAVİ TAKIM</span>
+      <div id="recap-blue-icons" class="recap-icons"></div>
+    </div>
+    <div id="recap-label">ÖNCEKİ MAÇ(LAR)DA OYNANANLAR</div>
+    <div class="recap-side red">
+      <div id="recap-red-icons" class="recap-icons"></div>
+      <span id="recap-red-name" class="recap-team-name">KIRMIZI TAKIM</span>
+    </div>
+  </div>
+
+  <!-- ALT BAR: Fotoğraftaki gibi tek sırada, sol/sağ yerine altta -->
+  <div id="bottom-bar" class="hidden">
+
+    <!-- İnce ban şeridi (pick şeridinin hemen üstünde, her takım kendi tarafında) -->
+    <div id="bans-strip">
+      <div id="blue-bans" class="bans-row"></div>
+      <div id="center-bans-label">BANS</div>
+      <div id="red-bans" class="bans-row"></div>
+    </div>
+
+    <!-- Ana pick şeridi: 5 mavi kutu — orta logo bloğu — 5 kırmızı kutu -->
+    <div id="picks-strip">
+      <div id="blue-picks" class="picks-row"></div>
+      <div id="center-block">
+        <img id="center-blue-logo" class="center-logo" alt="" />
+        <div id="center-vs">VS</div>
+        <img id="center-red-logo" class="center-logo" alt="" />
+      </div>
+      <div id="red-picks" class="picks-row"></div>
+    </div>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
