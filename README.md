@@ -46,7 +46,7 @@ lol-pickban-overlay/
 cd lol-pickban-overlay/backend
 npm install
 ```
-
+![](screenshots/Screenshot_3.png)
 This installs `express`, `cors`, `axios`, and `ws`.
 
 ## 2) Start the backend
@@ -58,7 +58,7 @@ doesn't need to be in champ select yet), then run:
 npm start
 # or: node server.js
 ```
-
+![](screenshots/Screenshot_4.png)
 The app always starts from a clean slate — nothing from a previous session
 (team names, score, match number, previous picks) carries over. On every
 launch it asks you a short series of questions in the terminal, in this order:
@@ -97,10 +97,12 @@ You should then see something like:
 
 1. In OBS: **Sources → Add → Browser Source**.
 2. URL: `http://localhost:5000/index.html`
-3. Width: `1920`, Height: `1080`.
-4. Leave **"Shutdown source when not visible"** **unchecked** (otherwise it
+3. or
+4. ![Select index.html file](screenshots/Screenshot_1.png)
+5. Width: `1920`, Height: `1080`.
+6. Leave **"Shutdown source when not visible"** **unchecked** (otherwise it
    reconnects the WebSocket every time you switch scenes).
-5. The background is already transparent — no green screen needed.
+7. The background is already transparent — no green screen needed.
 
 ## 4) Editing team info / score mid-broadcast
 
