@@ -49,7 +49,7 @@ lol-pickban-overlay/
 cd lol-pickban-overlay/backend
 npm install
 ```
-
+![](screenshots/Screenshot_3.png)
 Bu komut `express`, `cors`, `axios` ve `ws` paketlerini kurar.
 
 ## 2) Backend'i başlatma
@@ -61,7 +61,7 @@ lobi ekranı yeterli), sonra şunu çalıştır:
 npm start
 # ya da: node server.js
 ```
-
+![](screenshots/Screenshot_4.png)
 Uygulama her seferinde sıfırdan başlar — önceki oturumdan hiçbir şey (takım
 isimleri, skor, maç numarası, önceki pickler) taşınmaz. Her açılışta
 terminalde şu sırayla birkaç soru sorar:
@@ -103,6 +103,9 @@ Ardından şuna benzer bir çıktı görmelisin:
 
 1. OBS'te: **Kaynak Ekle → Tarayıcı (Browser Source)**.
 2. URL: `http://localhost:5000/index.html`
+yada
+![](screenshots/Screenshot_1.png)
+dosyasını seçebilirsiniz.
 3. Genişlik: `1920`, Yükseklik: `1080`.
 4. **"Görünür değilken kaynağı kapat" (Shutdown source when not visible)**
    kutucuğunu **işaretsiz** bırak (aksi halde her sahne geçişinde WebSocket
